@@ -1,0 +1,50 @@
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+//noinspection GroovyAssignabilityCheck
+task integrationTest(type: Test) {
+    systemProperty("kayenta.signalfx.apiKey", System.getProperty("kayenta.signalfx.apiKey"))
+    systemProperty("spring.application.name", "kayenta")
+    systemProperty('spring.config.name', "spinnaker,kayenta")
+    systemProperty('spring.config.location', "file:${project.rootDir}/kayenta-signalfx/src/integration-test/resources/config/")
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+integrationTest {
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
+dependencies {
+    compile project(":kayenta-core")
+
+    compile spinnaker.dependency('bootWeb')
+    compile spinnaker.dependency("korkSwagger")
+    compile spinnaker.dependency('lombok')
+
+    compile "com.netflix.spinnaker.orca:orca-core:$orcaVersion"
+
+    // Integration Test dependencies
+    integrationTestCompile sourceSets.main.output
+    integrationTestCompile configurations.testCompile
+    integrationTestCompile sourceSets.test.output
+    integrationTestRuntime configurations.testRuntime
+    integrationTestCompile 'io.rest-assured:rest-assured:3.1.1'
+    integrationTestCompile 'it.ozimov:embedded-redis:0.7.2'
+    integrationTestCompile project(':kayenta-web')
+}
