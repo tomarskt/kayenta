@@ -17,32 +17,29 @@
 
 package com.netflix.kayenta.signalfx.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import retrofit.converter.JacksonConverter;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedInput;
 
 import java.io.InputStream;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 public class SignalFxRemoteServiceTest {
 
     @Test
-    public void test_that_signalfx_time_series_json_response_can_be_deserialized_successfully() throws Exception {
-        InputStream response = getClass().getClassLoader().getResourceAsStream("signalfx-time-series-window-response.json");
-        JacksonConverter converter = new JacksonConverter(new ObjectMapper());
-        TypedInput typedInput = new TypedByteArray("application/json", ByteStreams.toByteArray(response));
-        SignalFxTimeSeriesQueryResult result = (SignalFxTimeSeriesQueryResult) converter
-                .fromBody(typedInput, SignalFxTimeSeriesQueryResult.class);
+    public void test_that_a_signalfx_signal_flow_response_can_be_parsed() throws Exception {
+        InputStream response = getClass().getClassLoader().getResourceAsStream("signalfx-signalflow-response.text");
+        SignalFxConverter converter = new SignalFxConverter();
+        TypedInput typedInput = new TypedByteArray("text/plain", ByteStreams.toByteArray(response));
+        SignalFlowExecutionResult signalFlowExecutionResult = (SignalFlowExecutionResult) converter.fromBody(typedInput, SignalFlowExecutionResult.class);
 
-        assertNotNull(result);
-        assertEquals(6, result.getTimeSeriesData().size());
+        assertNotNull(signalFlowExecutionResult);
+        assertThat("The signalFlowExecutionResult contains the channel messages",
+                signalFlowExecutionResult.getChannelMessages().size(), greaterThan(1));
     }
 
 }

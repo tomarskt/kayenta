@@ -39,6 +39,8 @@ dependencies {
 
     compile "com.netflix.spinnaker.orca:orca-core:$orcaVersion"
 
+    compile group: 'com.signalfx.public', name: 'signalfx-java', version: '0.0.48'
+
     // Integration Test dependencies
     integrationTestCompile sourceSets.main.output
     integrationTestCompile configurations.testCompile
@@ -47,4 +49,10 @@ dependencies {
     integrationTestCompile 'io.rest-assured:rest-assured:3.1.1'
     integrationTestCompile 'it.ozimov:embedded-redis:0.7.2'
     integrationTestCompile project(':kayenta-web')
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

@@ -17,15 +17,15 @@
 
 package com.netflix.kayenta.signalfx.service;
 
-public class SignalFxMetricQueryRequestError extends RuntimeException {
+public class SignalFxRequestError extends RuntimeException {
 
     private static final String MSG_TEMPLATE =
-            "An error occurred when trying to query SignalFx, attempted to GET %s/v1/timeserieswindow " +
-                    "with query='%s', startMs='%s', endMs='%s', resolution='%s' for accountName: %s. Received error response: %s";
+            "An error occurred when trying to execute a SignalFlow program " +
+                    "with program='%s', startMs='%s', endMs='%s', resolution='%s' for accountName: %s. Received error response: %s";
 
-    public SignalFxMetricQueryRequestError(ErrorResponse errorResponse, String baseUrl, String query, long start, long end,
-                                           long resolution, String accountName) {
+    public SignalFxRequestError(ErrorResponse errorResponse, String program, long start, long end,
+                                long resolution, String accountName) {
 
-        super(String.format(MSG_TEMPLATE, baseUrl, query, start, end, resolution, accountName, errorResponse.toString()));
+        super(String.format(MSG_TEMPLATE, program, start, end, resolution, accountName, errorResponse.toString()));
     }
 }

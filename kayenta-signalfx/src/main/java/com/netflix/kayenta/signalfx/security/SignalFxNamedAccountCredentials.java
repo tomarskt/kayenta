@@ -20,7 +20,7 @@ package com.netflix.kayenta.signalfx.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.netflix.kayenta.retrofit.config.RemoteService;
 import com.netflix.kayenta.security.AccountCredentials;
-import com.netflix.kayenta.signalfx.service.SignalFxRemoteService;
+import com.netflix.kayenta.signalfx.service.SignalFxSignalFlowRemoteService;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
@@ -51,6 +51,6 @@ public class SignalFxNamedAccountCredentials implements AccountCredentials<Signa
     }
 
     @JsonIgnore
-    SignalFxRemoteService signalFxRemoteService;
+    SignalFxSignalFlowRemoteService signalFlowService;
 
 }

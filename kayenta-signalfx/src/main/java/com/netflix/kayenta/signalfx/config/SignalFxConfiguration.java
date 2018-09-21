@@ -17,7 +17,6 @@
 
 package com.netflix.kayenta.signalfx.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.kayenta.metrics.MetricsService;
 import com.netflix.kayenta.retrofit.config.RetrofitClientFactory;
 import com.netflix.kayenta.security.AccountCredentials;
@@ -25,7 +24,8 @@ import com.netflix.kayenta.security.AccountCredentialsRepository;
 import com.netflix.kayenta.signalfx.metrics.SignalFxMetricsService;
 import com.netflix.kayenta.signalfx.security.SignalFxCredentials;
 import com.netflix.kayenta.signalfx.security.SignalFxNamedAccountCredentials;
-import com.netflix.kayenta.signalfx.service.SignalFxRemoteService;
+import com.netflix.kayenta.signalfx.service.SignalFxConverter;
+import com.netflix.kayenta.signalfx.service.SignalFxSignalFlowRemoteService;
 import com.squareup.okhttp.OkHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,7 +35,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.CollectionUtils;
-import retrofit.converter.JacksonConverter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,7 +55,6 @@ public class SignalFxConfiguration {
     @Bean
     MetricsService signalFxMetricService(SignalFxConfigurationProperties signalFxConfigurationProperties,
                                          RetrofitClientFactory retrofitClientFactory,
-                                         ObjectMapper objectMapper,
                                          OkHttpClient okHttpClient,
                                          AccountCredentialsRepository accountCredentialsRepository) {
 
@@ -76,9 +74,9 @@ public class SignalFxConfiguration {
 
             if (!CollectionUtils.isEmpty(supportedTypes)) {
                 if (supportedTypes.contains(AccountCredentials.Type.METRICS_STORE)) {
-                    accountCredentialsBuilder.signalFxRemoteService(retrofitClientFactory.createClient(
-                            SignalFxRemoteService.class,
-                            new JacksonConverter(objectMapper),
+                    accountCredentialsBuilder.signalFlowService(retrofitClientFactory.createClient(
+                            SignalFxSignalFlowRemoteService.class,
+                            new SignalFxConverter(),
                             signalFxManagedAccount.getEndpoint(),
                             okHttpClient
                     ));

@@ -17,14 +17,16 @@
 
 package com.netflix.kayenta.signalfx.service;
 
-import lombok.AllArgsConstructor;
+import com.signalfx.signalflow.ChannelMessage;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.List;
+
 @Data
-public class SignalFxDataPoint {
-    private Long epochTimeInMillis;
-    private Double value;
+@Builder
+public class SignalFlowExecutionResult {
+
+    private List<ChannelMessage> channelMessages;
+
 }

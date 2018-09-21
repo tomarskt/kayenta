@@ -217,8 +217,7 @@ Atlas, Stackdriver and Prometheus are used.
       "name": "Cpu Usage Percentage",
       "query": {
         "metricName": "kayenta.integration-test.cpu.avg",
-        "queryPairs": [],
-        "timeSeriesReducer": "avg",
+        "aggregationMethod": "avg",
         "serviceType": "signalfx",
         "type": "signalfx"
       },
@@ -243,11 +242,10 @@ Atlas, Stackdriver and Prometheus are used.
           },
           {
             "key": "status_code",
-            "value": "4*",
-            "escapeValue": false
+            "value": "4*"
           }
         ],
-        "timeSeriesReducer": "sum",
+        "aggregationMethod": "sum",
         "serviceType": "signalfx",
         "type": "signalfx"
       },

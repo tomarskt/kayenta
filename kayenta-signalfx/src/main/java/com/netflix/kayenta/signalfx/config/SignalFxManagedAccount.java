@@ -33,7 +33,7 @@ public class SignalFxManagedAccount {
     private String accessToken;
 
     @NotNull
-    private RemoteService endpoint = new RemoteService().setBaseUrl("https://api.signalfx.com");
+    private RemoteService endpoint = new RemoteService().setBaseUrl("https://stream.signalfx.com");
 
     private List<AccountCredentials.Type> supportedTypes;
 }

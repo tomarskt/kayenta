@@ -19,7 +19,6 @@ package com.netflix.kayenta.canary.providers.metrics;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.netflix.kayenta.canary.CanaryMetricSetQueryConfig;
-import com.netflix.kayenta.signalfx.metrics.SignalFxTimeSeriesReducer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-import java.util.LinkedList;
 import java.util.List;
 
 @Builder
@@ -41,16 +39,17 @@ public class SignalFxCanaryMetricSetQueryConfig implements CanaryMetricSetQueryC
     @Getter
     private String metricName;
 
-    @Builder.Default
     @Getter
-    private List<QueryPair> queryPairs = new LinkedList<>();
+    private List<QueryPair> queryPairs;
 
-    @Builder.Default
     @Getter
-    private SignalFxTimeSeriesReducer timeSeriesReducer = SignalFxTimeSeriesReducer.AVERAGE;
+    private String aggregationMethod;
 
     @Getter
     private Long resolutionMillis;
+
+    @Getter
+    private String fullSignalFlowProgram;
 
     @Override
     public String getServiceType() {

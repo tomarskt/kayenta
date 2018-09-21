@@ -17,21 +17,18 @@
 
 package com.netflix.kayenta.canary.providers.metrics;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Can be used for Dimensions, Tags or Properties.
  * For Tags, use 'tag' as the key.
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class QueryPair {
-
     private String key;
     private String value;
-
-    /**
-     * If a query pair needs to include special query operators such as wild cards.
-     * You will need to set escape to false and manually escape your value, if needed.
-     */
-    private boolean escapeValue = true;
 }

@@ -19,11 +19,14 @@ package com.netflix.kayenta.signalfx.service;
 
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class ErrorResponse {
 
+    private int code;
+    private Map<String, Object> context;
+    private String errorType;
     private String message;
-    private Integer status;
-    private String type;
 
 }

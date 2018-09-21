@@ -59,6 +59,8 @@ import static org.hamcrest.Matchers.*;
 @Slf4j
 public class EndToEndIntegrationTests {
 
+    private static final String SCOPE_TEMPLATE = "filter('%s', '%s') and filter('test-id', '%s')";
+
     public static final int CANARY_WINDOW_IN_MINUTES = 1;
 
     @Autowired
@@ -81,13 +83,13 @@ public class EndToEndIntegrationTests {
     }
 
     @Test
-    public void test_that_signalfx_can_be_used_as_a_data_source_for_a_vanary_rxecution_healthy() throws IOException {
+    public void test_that_signalfx_can_be_used_as_a_data_source_for_a_canary_execution_healthy() throws IOException {
         ValidatableResponse response = doCanaryExec(HEALTHY_EXPERIMENT_SCOPE_NAME);
         response.body("result.judgeResult.score.classification", is("Pass"));
     }
 
     @Test
-    public void test_that_signalfx_can_be_used_as_a_data_source_for_a_vanary_rxecution_unhealthy() throws IOException {
+    public void test_that_signalfx_can_be_used_as_a_data_source_for_a_canary_execution_unhealthy() throws IOException {
         ValidatableResponse response = doCanaryExec(UNHEALTHY_EXPERIMENT_SCOPE_NAME);
         response.body("result.judgeResult.score.classification", is("Fail"));
         response.body("result.judgeResult.score.classificationReason", containsString("Bad Request Rate for /v1/some-endpoint"));
@@ -111,7 +113,7 @@ public class EndToEndIntegrationTests {
 
         CanaryScope control = signalFxCanaryScopeFactory.buildCanaryScope(
                 new CanaryScope()
-                        .setScope(String.format("%s:\"%s\" AND test-id:\"%s\"",
+                        .setScope(String.format(SCOPE_TEMPLATE,
                                 SIGNAL_FX_SCOPE_IDENTIFYING_DIMENSION_NAME,
                                 CONTROL_SCOPE_NAME,
                                 testId)
@@ -125,7 +127,7 @@ public class EndToEndIntegrationTests {
 
         CanaryScope experiment = signalFxCanaryScopeFactory.buildCanaryScope(
                 new CanaryScope()
-                        .setScope(String.format("%s:\"%s\" AND test-id:\"%s\"",
+                        .setScope(String.format(SCOPE_TEMPLATE,
                                 SIGNAL_FX_SCOPE_IDENTIFYING_DIMENSION_NAME,
                                 expScope,
                                 testId)
