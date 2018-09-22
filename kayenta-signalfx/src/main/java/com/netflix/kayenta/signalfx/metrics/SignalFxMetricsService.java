@@ -107,11 +107,10 @@ public class SignalFxMetricsService implements MetricsService {
         List<QueryPair> queryPairs = Optional.ofNullable(queryConfig.getQueryPairs()).orElse(new LinkedList<>());
 
         // Fetch the user override or build the simple SignalFlow program.
-        String program = Optional.ofNullable(queryConfig.getFullSignalFlowProgram()).orElseGet(() ->
-                SimpleSignalFlowProgramBuilder
-                    .create(queryConfig.getMetricName(), transformationMethod)
-                    .withQueryPairs(queryPairs)
-                    .withScope(canaryScope.getScope()).build());
+        String program = SimpleSignalFlowProgramBuilder
+                .create(queryConfig.getMetricName(), transformationMethod)
+                .withQueryPairs(queryPairs)
+                .withScope(canaryScope.getScope()).build();
 
         SignalFlowExecutionResult signalFlowExecutionResult;
         try {

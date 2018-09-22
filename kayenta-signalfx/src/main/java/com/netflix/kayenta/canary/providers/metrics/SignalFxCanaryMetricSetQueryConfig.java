@@ -48,9 +48,6 @@ public class SignalFxCanaryMetricSetQueryConfig implements CanaryMetricSetQueryC
     @Getter
     private Long resolutionMillis;
 
-    @Getter
-    private String fullSignalFlowProgram;
-
     @Override
     public String getServiceType() {
         return "signalfx";
